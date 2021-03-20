@@ -3,6 +3,7 @@ __pycache__/
 db.sqlite3
 venv/
 media/
+.envs/
 
 **/migrations/**
 !**/migrations

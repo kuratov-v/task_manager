@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres
+    container_name: task-manager-postgres
+    env_file:
+      - ./.envs/.postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: task-manager-django
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    env_file:
+      - ./.envs/.django
+      - ./.envs/.postgres
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
