@@ -5,7 +5,7 @@ from rest_framework.test import APITestCase
 import datetime
 
 from task_manager.models import Task
-from task_manager.serializers import TaskSerializer
+from task_manager.serializers import TaskSerializer, TaskReadSerializer
 from django.contrib.auth import get_user_model
 
 
@@ -27,7 +27,7 @@ class TaskAPITestCase(APITestCase):
     def test_get(self):
         self.client.force_authenticate(user=self.user_1)
         response = self.client.get(reverse('task-list'))
-        serializer_data = TaskSerializer([self.task_1, self.task_2], many=True).data
+        serializer_data = TaskReadSerializer([self.task_1, self.task_2], many=True).data
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(serializer_data, response.data)
 
@@ -85,6 +85,6 @@ class TaskAPITestCase(APITestCase):
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
-        expected_data = TaskSerializer([self.task_2], many=True).data
+        expected_data = TaskReadSerializer([self.task_2], many=True).data
 
         self.assertEqual(expected_data, response.json())

@@ -19,3 +19,17 @@ class Task(models.Model):
 
     def __str__(self):
         return f"{self.pk} | {self.title}"
+
+
+class TaskChangeHistory(models.Model):
+    task = models.ForeignKey(
+        Task, on_delete=models.CASCADE, related_name="change_history"
+    )
+    datetime = models.DateTimeField(auto_now_add=True, editable=False)
+    changed_to = models.JSONField()
+
+    class Meta:
+        ordering = ["-datetime"]
+
+    def __str__(self):
+        return f"{self.task} changed fields: {self.changed_to}"
